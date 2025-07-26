@@ -11,7 +11,7 @@ pipeline {
                 echo "Checking out code on master node..."
                 checkout scmGit(
                     branches: [[name: '*/main']],
-                    userRemoteConfigs: [[url: 'https://github.com/vcjain/docker-agent-demo.git']]
+                    userRemoteConfigs: [[https://github.com/harshitasadudiya/Jenkins-pipeline-project.git']]
                 )
             }
         }
