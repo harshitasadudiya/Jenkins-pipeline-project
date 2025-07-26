@@ -1,41 +1,50 @@
 pipeline {
-    agent none  
-    tools {
-        maven 'maven3' 
+    
+   agent {
+        label 'none'
     }
 
-    stages {
-        stage('Checkout') {
-            agent { label 'master' }  
-            steps {
-                echo "Checking out code on master node..."
-                checkout([$class: 'GitSCM',
-                 branches: [[name: '*/main']],
-                 userRemoteConfigs: [[url: 'https://github.com/harshitasadudiya/Jenkins-pipeline-project.git']]
-                 ])
+    tools {
+      maven 'maven3'
+    }
+    
+    
+    stages{
+        stage ('Checkout') {
+             agent {
+                   label 'master'
             }
+            steps{
+                checkout poll: false, scm: scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/vcjain/docker-agent-demo.git']])
+            }
+            
         }
-
-        stage('Build') {
-            agent { label 'java' }  
+        stage ('Build') {
+             agent {
+                   label 'java'
+             }
             steps {
-                echo "Compiling code on slave1 (java)..."
+                echo "Build Stage is in progress"
                 sh 'mvn compile'
             }
+            
         }
-
-        stage('Test') {
-            agent { label 'ssh' } 
+        stage ('Test'){
+             agent {
+                  label 'ssh'
+            }
             steps {
-                echo "Running tests on slave2 (ssh)..."
+                echo "Test Stage is in progress"
                 sh 'mvn test'
             }
+            
         }
-
-        stage('Deploy') {
-            agent { label 'master' } 
-            steps {
-                echo "Deploying from master node..."
+        stage('Deploy'){
+             agent {
+                   label 'master'
+            }
+            steps{
+                echo 'Deploying Build'
             }
         }
     }
