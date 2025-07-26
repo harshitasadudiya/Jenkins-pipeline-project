@@ -9,10 +9,10 @@ pipeline {
             agent { label 'master' }  
             steps {
                 echo "Checking out code on master node..."
-                checkout scmGit(
-                    branches: [[name: '*/main']],
-                    userRemoteConfigs: [[https://github.com/harshitasadudiya/Jenkins-pipeline-project.git']]
-                )
+                checkout([$class: 'GitSCM',
+                 branches: [[name: '*/main']],
+                 userRemoteConfigs: [[url: 'https://github.com/vcjain/docker-agent-demo.git']]
+                 ])
             }
         }
 
